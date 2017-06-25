@@ -32,15 +32,15 @@
             todos: [
               {
                 id: 1,
-                name: 'Meeting at work'
+                text: 'Meeting at work'
               },
               {
                 id: 2,
-                name: 'Bring kids to school'
+                text: 'Bring kids to school'
               },
               {
                 id: 3,
-                name: 'Food shopping'
+                text: 'Food shopping'
               }
             ]
           }
@@ -49,21 +49,54 @@
         render: function() {
           return(
             <div>
-              <TodoForm />
+              <TodoForm onTodoApp={this.handleTodoAdd} />
               <TodoList todos={this.state.todos} />
             </div>
           )
+        },
+
+        handleTodoAdd: function(text) {
+          var newTodo = {
+            id: this.state.todos.length + 1,
+            text: text
+          }
+
+          this.setState({todos: this.state.todos.concat(newTodo)});
         }
+
       });
 
       var TodoForm = React.createClass({
         render: function() {
           return(
             <div>
-              todo form
+              <form onSubmit={this.onSubmit}>
+                <div className="form-group">
+                  <label>Todo text</label>
+                  <input type="text" ref="text" onChange={this.onChange} className="form-control" />
+                </div>
+              </form>
             </div>
           )
+        },
+
+        onChange: function() {
+          console.log('Changing text...');
+        },
+
+        onSubmit: function(e) {
+          e.preventDefault();
+
+          var text = this.refs.text.value.trim();
+          if(!text) {
+            alert('Please enter a todo');
+          }
+
+          this.props.onTodoApp(text);
+          this.refs.text.value = '';
+
         }
+
       });
 
       var TodoList = React.createClass({
@@ -72,7 +105,7 @@
             <ul className="list-group">
               {
                 this.props.todos.map(todo => {
-                  return <li className="list-group-item" todo={todo} key={todo.id}>{todo.name}</li>
+                  return <li className="list-group-item" todo={todo} key={todo.id}>{todo.text}</li>
                 })
               }
             </ul>
