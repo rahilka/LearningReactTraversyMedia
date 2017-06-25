@@ -27,43 +27,57 @@
       var App = React.createClass({
 
         getInitialState: function() {
-          return {
-            text: 'Hello World'
+          return{
+            text: '',
+            todos: [
+              {
+                id: 1,
+                name: 'Meeting at work'
+              },
+              {
+                id: 2,
+                name: 'Bring kids to school'
+              },
+              {
+                id: 3,
+                name: 'Food shopping'
+              }
+            ]
           }
         },
 
         render: function() {
           return(
             <div>
-              <h1>{this.state.text}</h1>
-
-              <form>
-                <input type="text" onChange={this.changeText} value={this.state.text} />
-                <button className="btn btn-primary">Click</button>
-              </form>
-              <br />
-              <ComponentTwo text={this.state.text} />
-
+              <TodoForm />
+              <TodoList todos={this.state.todos} />
             </div>
           )
-        },
-
-        changeText: function(e) {
-          this.setState({text: e.target.value});
         }
-
       });
 
-      var ComponentTwo = React.createClass({
-
+      var TodoForm = React.createClass({
         render: function() {
           return(
             <div>
-              {this.props.text}
+              todo form
             </div>
-          );
+          )
         }
+      });
 
+      var TodoList = React.createClass({
+        render: function() {
+          return(
+            <ul className="list-group">
+              {
+                this.props.todos.map(todo => {
+                  return <li className="list-group-item" todo={todo} key={todo.id}>{todo.name}</li>
+                })
+              }
+            </ul>
+          )
+        }
       });
 
       ReactDOM.render(
